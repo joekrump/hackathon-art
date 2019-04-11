@@ -19,7 +19,7 @@ const sketch = () => {
         const u = count <= 1 ? 0.5 : x / (count - 1);
         const v = count <= 1 ? 0.5 : y / (count - 1);
         points.push({
-          radius: random.value() * 0.03,
+          radius: Math.max(0, random.gaussian()) * 0.03,
           position: [u, v]
         });
       }
