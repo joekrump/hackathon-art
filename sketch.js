@@ -46,6 +46,8 @@ const sketch = () => {
       context.arc(x, y, radius * width, 0, Math.PI * 2, false);
       context.strokeStyle = "black";
       context.lineWidth = 3;
+      context.fillStyle = "blue"
+      context.fill();
       context.stroke();
     });
   };
