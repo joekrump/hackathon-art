@@ -8,7 +8,7 @@ const settings = {
 const sketch = () => {
   const createGrid =  () => {
     const points = [];
-    const count = 5;
+    const count = 20;
 
     for(let x = 0; x < count; x++) {
       for(let y = 0; y < count; y++) {
