@@ -40,7 +40,7 @@ const sketch = ({ context }) => {
     );
 
     mesh.position.set(
-      1, random.value(), random.value(),
+      random.value(), random.value(), random.value(),
     );
     mesh.scale.multiplyScalar(0.1);
 
