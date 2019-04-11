@@ -24,7 +24,7 @@ const frag = glsl(/* glsl */`
     float dist = length(center);
 
     vec3 color = mix(colorB, colorC, vUv.x);
-    gl_FragColor = vec4(color, dist);
+    gl_FragColor = vec4(color, dist > 0.25 ? 0.0 : 1.0);
   }
 `); 
 
