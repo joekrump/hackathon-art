@@ -1,4 +1,5 @@
 const canvasSketch = require('canvas-sketch');
+const random = require("canvas-sketch-util/random");
 
 // Ensure ThreeJS is in global scope for the 'examples/'
 global.THREE = require('three');
@@ -27,18 +28,24 @@ const sketch = ({ context }) => {
   // Setup a camera
   const camera = new THREE.OrthographicCamera();
 
-  // Setup camera controller
-
   // Setup your scene
   const scene = new THREE.Scene();
 
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({
-      color: 'blue',
-    })
-  );
-  scene.add(mesh);
+  for (let i = 0; i < 10; i++) {
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({
+        color: 'blue',
+      })
+    );
+
+    mesh.position.set(
+      1, random.value(), random.value(),
+    );
+    mesh.scale.multiplyScalar(0.1);
+
+    scene.add(mesh);
+  }
 
   // draw each frame
   return {
@@ -72,7 +79,6 @@ const sketch = ({ context }) => {
     },
     // Update & render your scene here
     render ({ time }) {
-      mesh.rotation.y = time * (10 * Math.PI / 180);
       renderer.render(scene, camera);
     },
     // Dispose of events & renderer for cleaner hot-reloading
