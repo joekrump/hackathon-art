@@ -48,13 +48,17 @@ const sketch = () => {
       const x = lerp(margin, width - margin, u);
       const y = lerp(margin, height - margin, v);
 
-      context.beginPath();
-      context.arc(x, y, radius * width, 0, Math.PI * 2, false);
-      context.strokeStyle = "black";
-      context.lineWidth = 3;
+      // context.beginPath();
+      // context.arc(x, y, radius * width, 0, Math.PI * 2, false);
+      // context.strokeStyle = "black";
+      // context.lineWidth = 3;
+      // context.fillStyle = color;
+      // context.fill();
+      // context.stroke();
+
       context.fillStyle = color;
-      context.fill();
-      context.stroke();
+      context.font = "100px 'Arial'";
+      context.fillText("A", x, y);
     });
   };
 };
