@@ -3,9 +3,13 @@ const { lerp } = require('canvas-sketch-util/math');
 const random = require("canvas-sketch-util/random");
 const palettes = require("nice-color-palettes");
 
+const seed = random.getRandomSeed();
+random.setSeed(seed);
+
 const settings = {
   dimensions: [2048, 2048],
   pixelsPerInch: 300,
+  suffix: seed,
 };
 
 const sketch = () => {
@@ -13,7 +17,7 @@ const sketch = () => {
 
   const createGrid =  () => {
     const points = [];
-    const count = 40;
+    const count = 20;
 
     for(let x = 0; x < count; x++) {
       for(let y = 0; y < count; y++) {
@@ -24,7 +28,7 @@ const sketch = () => {
         points.push({
           color: random.pick(palette),
           radius,
-          rotate: random.noise2D(u, v),
+          rotate: random.noise2D(u * 40, v * 40),
           position: [u, v]
         });
       }
