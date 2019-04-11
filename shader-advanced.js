@@ -16,6 +16,7 @@ const frag = glsl(/* glsl*/`
   varying vec2 vUv;
 
   #pragma glslify: noise = require('glsl-noise/simplex/3d');
+  #pragma glslify: hsl2rgb = require('glsl-hsl2rgb');
 
   void main () {
     float n = noise(vec3(vUv.xy * 2.0, time));
