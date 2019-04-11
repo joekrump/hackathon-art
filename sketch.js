@@ -57,7 +57,7 @@ const sketch = () => {
       // context.stroke();
 
       context.fillStyle = color;
-      context.font = "100px 'Arial'";
+      context.font = `${radius * width}px 'Arial'`;
       context.fillText("A", x, y);
     });
   };
