@@ -15,9 +15,11 @@ const frag = glsl(/* glsl*/`
   uniform float time;
   varying vec2 vUv;
 
+  #pragma glslify: noise = require('glsl-noise/simplex/3d');
+
   void main () {
-    vec3 color = 0.5 + 0.5 * cos(time + vUv.xyx + vec3(0.0, 2.0, 4.0));
-    gl_FragColor = vec4(color, 1.0);
+    float n = noise(vec3(vUv.xy, time));
+    gl_FragColor = vec4(vec3(n), 1.0);
   }
 `);
 
