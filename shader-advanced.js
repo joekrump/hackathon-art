@@ -20,7 +20,12 @@ const frag = glsl(/* glsl*/`
 
   void main () {
     float n = noise(vec3(vUv.xy * 2.0, time));
-    gl_FragColor = vec4(vec3(n), 1.0);
+    vec3 color = hsl2rgb(
+      0.2 + n * 0.2,
+      0.5,
+      0.5
+    );
+    gl_FragColor = vec4(color, 1.0);
   }
 `);
 
