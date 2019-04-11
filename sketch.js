@@ -13,7 +13,7 @@ const sketch = () => {
 
   const createGrid =  () => {
     const points = [];
-    const count = 20;
+    const count = 40;
 
     for(let x = 0; x < count; x++) {
       for(let y = 0; y < count; y++) {
@@ -24,6 +24,7 @@ const sketch = () => {
         points.push({
           color: random.pick(palette),
           radius,
+          rotate: random.noise2D(u, v),
           position: [u, v]
         });
       }
@@ -43,7 +44,7 @@ const sketch = () => {
     context.fillStyle = "white";
     context.fillRect(0, 0, width, height);
 
-    points.forEach(({ position, radius, color }) => {
+    points.forEach(({ position, radius, color, rotate }) => {
       const [u, v] = position;
       const x = lerp(margin, width - margin, u);
       const y = lerp(margin, height - margin, v);
@@ -55,10 +56,13 @@ const sketch = () => {
       // context.fillStyle = color;
       // context.fill();
       // context.stroke();
-
+      context.save();
       context.fillStyle = color;
       context.font = `${radius * width}px 'Arial'`;
-      context.fillText("A", x, y);
+      context.translate(x, y);
+      context.rotate(rotate);
+      context.fillText("=", 0, 0);
+      context.restore();
     });
   };
 };
