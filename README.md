@@ -9,3 +9,8 @@ _Run the following commands_
 1. `npm install`
 2. `npm install canvas-sketch-cli --global`
 3. `canvas-sketch sketch.js`
+
+## Tools
+
+http://cubic-bezier.com/
+https://giftool.surge.sh/
