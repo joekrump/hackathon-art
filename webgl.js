@@ -1,5 +1,6 @@
 const canvasSketch = require('canvas-sketch');
 const random = require("canvas-sketch-util/random");
+const palettes = require("nice-color-palettes");
 
 // Ensure ThreeJS is in global scope for the 'examples/'
 global.THREE = require('three');
@@ -27,7 +28,7 @@ const sketch = ({ context }) => {
 
   // Setup a camera
   const camera = new THREE.OrthographicCamera();
-
+  const palette = random.pick(palettes);
   // Setup your scene
   const scene = new THREE.Scene();
   const box = new THREE.BoxGeometry(1, 1, 1);
@@ -36,7 +37,7 @@ const sketch = ({ context }) => {
     const mesh = new THREE.Mesh(
       box,
       new THREE.MeshBasicMaterial({
-        color: 'blue',
+        color: random.pick(palette),
       })
     );
 
