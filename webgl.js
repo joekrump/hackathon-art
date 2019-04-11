@@ -8,11 +8,19 @@ global.THREE = require('three');
 // Include any additional ThreeJS examples below
 require('three/examples/js/controls/OrbitControls');
 
+const seed = random.getRandomSeed();
+console.log(seed);
+random.setSeed(seed);
+
 const settings = {
+  dimensions: [512, 512],
+  fps: 24,
+  duration: 4,
   // Make the loop animated
   animate: true,
   // Get a WebGL canvas rather than 2D
   context: 'webgl',
+  suffix: seed,
   // Turn on MSAA
   attributes: { antialias: true }
 };
@@ -33,7 +41,7 @@ const sketch = ({ context }) => {
   const scene = new THREE.Scene();
   const box = new THREE.BoxGeometry(1, 1, 1);
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 100; i++) {
     const mesh = new THREE.Mesh(
       box,
       new THREE.MeshStandardMaterial({
@@ -59,7 +67,7 @@ const sketch = ({ context }) => {
 
   scene.add(new THREE.AmbientLight('hsl(0, 0%, 60%)'));
   const light = new THREE.DirectionalLight('white', 1);
-  light.position.set(0, 0, 4);
+  light.position.set(0, 1, 4);
   scene.add(light);
 
   // draw each frame
@@ -93,8 +101,9 @@ const sketch = ({ context }) => {
       camera.updateProjectionMatrix();
     },
     // Update & render your scene here
-    render ({ time }) {
+    render ({ time, playhead }) {
       renderer.render(scene, camera);
+      scene.rotation.y = Math.sin(playhead * Math.PI) * 2;
     },
     // Dispose of events & renderer for cleaner hot-reloading
     unload () {
