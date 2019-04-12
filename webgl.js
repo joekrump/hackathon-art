@@ -3,6 +3,7 @@ const random = require("canvas-sketch-util/random");
 const palettes = require("nice-color-palettes");
 const eases = require("eases");
 const BezierEasing = require("bezier-easing");
+const glsl = require('glslify');
 // Ensure ThreeJS is in global scope for the 'examples/'
 global.THREE = require('three');
 
@@ -53,16 +54,19 @@ const sketch = ({ context }) => {
     }
   `;
 
-  const vertexShader = /* glsl */`
+  const vertexShader = glsl(/* glsl */`
     varying vec2 vUv;
     uniform float time;
 
+    #pragma glslify: noise = require('glsl-noise/simplex/4d');
+
     void main() {
       vUv = uv;
-      vec3 pos = position.xyz * sin(time);
+      vec3 pos = position.xyz;
+      pos += noise(vec4(position.xyz, time));
       gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
     }
-  `;
+  `);
 
   for (let i = 0; i < 100; i++) {
     const mesh = new THREE.Mesh(
