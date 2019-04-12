@@ -26,9 +26,9 @@ _Run the following commands_
 
 1. `npm install`
 2. `npm install canvas-sketch-cli --global`
-3. `canvas-sketch sketch.js`
+3. `canvas-sketch <graphics_file_name>` Ex. `canvas-sketch webgl.js`
 
-## Tools
+## Additional Tools
 
-http://cubic-bezier.com/
-https://giftool.surge.sh/
+1. For experimenting with bezier easing curves: http://cubic-bezier.com/
+2. For converting a list of PNGs into a GIF: https://giftool.surge.sh/
