@@ -12,7 +12,7 @@ const settings = {
 };
 
 // Your glsl code
-const frag = glsl(/* glsl*/`
+const frag = glsl(/* glsl */`
   precision highp float;
 
   uniform float time;
