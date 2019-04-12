@@ -22,7 +22,7 @@ Some art that has been made via this project:
 
 ## Setup
 
-_Run the following commands_
+_Run the following commands in a terminal window_
 
 1. `npm install`
 2. `npm install canvas-sketch-cli --global`
