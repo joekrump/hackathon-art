@@ -16,7 +16,7 @@ random.setSeed(seed);
 const settings = {
   dimensions: [512, 512],
   fps: 24,
-  duration: 4,
+  // duration: 4,
   // Make the loop animated
   animate: true,
   // Get a WebGL canvas rather than 2D
@@ -42,21 +42,25 @@ const sketch = ({ context }) => {
   const scene = new THREE.Scene();
 
   const box = new THREE.BoxGeometry(1, 1, 1);
+  const meshes = [];
 
   const fragmentShader = /* glsl */`
     varying vec2 vUv;
+    uniform vec3 color;
 
     void main () {
-      vec3 color = vec3(1.0);
-      gl_FragColor = vec4(vUv.x, 0.0, 0.0, 1.0);
+      gl_FragColor = vec4(vec3(color * vUv.x), 1.0);
     }
   `;
 
   const vertexShader = /* glsl */`
     varying vec2 vUv;
+    uniform float time;
+
     void main() {
       vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xyz, 1.0);
+      vec3 pos = position.xyz * sin(time);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
     }
   `;
 
@@ -66,6 +70,10 @@ const sketch = ({ context }) => {
       new THREE.ShaderMaterial({
         fragmentShader,
         vertexShader,
+        uniforms: {
+          time: { value: 0 },
+          color: { value: new THREE.Color(random.pick(palette))}
+        }
       })
     );
 
@@ -81,7 +89,7 @@ const sketch = ({ context }) => {
       random.range(-1, 1),
     );
     mesh.scale.multiplyScalar(0.5);
-
+    meshes.push(mesh);
     scene.add(mesh);
   }
 
@@ -126,6 +134,10 @@ const sketch = ({ context }) => {
       renderer.render(scene, camera);
       const t = Math.sin(playhead * Math.PI);
       scene.rotation.y = easeFn(t);
+
+      meshes.forEach(mesh => {
+        mesh.material.uniforms.time.value = time;
+      });
       // scene.rotation.y = easeFn(t);
       // scene.rotation.z = easeFn(t);
     },
