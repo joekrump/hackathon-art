@@ -10,7 +10,9 @@ global.THREE = require('three');
 // Include any additional ThreeJS examples below
 require('three/examples/js/controls/OrbitControls');
 
-const seed = random.getRandomSeed();
+// const seed = random.getRandomSeed();
+const seed = "25971";
+
 console.log(seed);
 random.setSeed(seed);
 
@@ -99,7 +101,7 @@ const sketch = ({ context }) => {
 
   scene.add(new THREE.AmbientLight('hsl(0, 0%, 60%)'));
   const light = new THREE.DirectionalLight('white', 1);
-  const easeFn = BezierEasing(.45, .09, .41, .98);
+  const easeFn = BezierEasing(.2, .1, .2, .2);
   light.position.set(14, 1, 50);
   scene.add(light);
 
@@ -136,14 +138,14 @@ const sketch = ({ context }) => {
     // Update & render your scene here
     render ({ time, playhead }) {
       renderer.render(scene, camera);
-      const t = Math.sin(playhead * Math.PI);
+      const t = Math.sin(time * Math.PI);
       scene.rotation.y = easeFn(t);
 
       meshes.forEach(mesh => {
         mesh.material.uniforms.time.value = time;
       });
       // scene.rotation.y = easeFn(t);
-      // scene.rotation.z = easeFn(t);
+      scene.rotation.z = easeFn(t);
     },
     // Dispose of events & renderer for cleaner hot-reloading
     unload () {
