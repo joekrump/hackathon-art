@@ -10,8 +10,8 @@ global.THREE = require('three');
 // Include any additional ThreeJS examples below
 require('three/examples/js/controls/OrbitControls');
 
-// const seed = random.getRandomSeed();
-const seed = "25971";
+const seed = random.getRandomSeed();
+// const seed = "25971";
 
 console.log(seed);
 random.setSeed(seed);
@@ -19,7 +19,7 @@ random.setSeed(seed);
 const settings = {
   dimensions: [512, 512],
   fps: 24,
-  // duration: 4,
+  duration: 10,
   // Make the loop animated
   animate: true,
   // Get a WebGL canvas rather than 2D
@@ -43,58 +43,67 @@ const sketch = ({ context }) => {
   const palette = random.pick(palettes);
   // Setup your scene
   const scene = new THREE.Scene();
-
-  const box = new THREE.BoxGeometry(1, 1, 1);
+  const material = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture("./clio.png") });
+  const box = new THREE.SphereGeometry(1, 32, 32);
   const meshes = [];
 
-  const fragmentShader = /* glsl */`
+  const fragmentShader = glsl(/* glsl */`
     varying vec2 vUv;
     uniform vec3 color;
 
+    #pragma glslify: noise = require('glsl-noise/simplex/3d');
+    uniform float playhead;
+
     void main () {
-      gl_FragColor = vec4(vec3(color * vUv.x), 1.0);
+      float offset = 0.3 * noise(vec3(vUv.xy * 3.0, playhead));
+      gl_FragColor = vec4(vec3(color * vUv.x + offset), 1.0);
     }
-  `;
+  `);
 
   const vertexShader = glsl(/* glsl */`
     varying vec2 vUv;
-    uniform float time;
+    uniform float playhead;
 
     #pragma glslify: noise = require('glsl-noise/simplex/4d');
 
     void main() {
       vUv = uv;
       vec3 pos = position.xyz;
-      pos += noise(vec4(position.xyz, time));
+
+      pos += 0.03 * normal * noise(vec4(position.xyz * 4.0, playhead * 3.14));
+      pos += 0.02 * normal * noise(vec4(position.xyz * 5.0, playhead * 3.14));
+      pos += 0.07 * normal * noise(vec4(position.xyz * 5.0, playhead * 3.14));
       gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
     }
   `);
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1; i++) {
     const mesh = new THREE.Mesh(
       box,
+      // material,
       new THREE.ShaderMaterial({
         fragmentShader,
         vertexShader,
         uniforms: {
-          time: { value: 0 },
+          playhead: { value: 0 },
           color: { value: new THREE.Color(random.pick(palette))}
         }
       })
+      // new THREE.MeshBasicMaterial( { color: 0x222222, wireframe: true} )
     );
 
-    mesh.position.set(
-      random.range(-1, 1),
-      random.range(-1, 1),
-      random.range(-1, 1),
-    );
+    // mesh.position.set(
+    //   random.range(-1, 1),
+    //   random.range(-1, 1),
+    //   random.range(-1, 1),
+    // );
 
-    mesh.scale.set(
-      random.range(-1, 1),
-      random.range(-1, 1),
-      random.range(-1, 1),
-    );
-    mesh.scale.multiplyScalar(0.5);
+    // mesh.scale.set(
+    //   random.range(-1, -0.5),
+    //   random.range(-1, -0.9),
+    //   random.range(-1, -0.9),
+    // );
+    // mesh.scale.multiplyScalar(1);
     meshes.push(mesh);
     scene.add(mesh);
   }
@@ -138,14 +147,14 @@ const sketch = ({ context }) => {
     // Update & render your scene here
     render ({ time, playhead }) {
       renderer.render(scene, camera);
-      const t = Math.sin(time * Math.PI);
-      scene.rotation.y = easeFn(t);
+      const t = Math.sin(playhead * Math.PI);
+      scene.rotation.y = t * 10;
 
       meshes.forEach(mesh => {
-        mesh.material.uniforms.time.value = time;
+        mesh.material.uniforms.playhead.value = playhead;
       });
       // scene.rotation.y = easeFn(t);
-      scene.rotation.z = easeFn(t);
+      // scene.rotation.z = easeFn(t);
     },
     // Dispose of events & renderer for cleaner hot-reloading
     unload () {
