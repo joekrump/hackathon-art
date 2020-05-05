@@ -22,6 +22,7 @@ Some art that has been made via this project:
 
 ## Setup
 
+
 _Run the following commands in a terminal window_
 
 1. `npm install`
